@@ -44,18 +44,19 @@ class Sc2Replay:
                     player_productions[player_id].append({'loop': event['_gameloop'], 'name': event['m_unitTypeName']})
                 # units training
                 elif event_name == 'NNet.Replay.Tracker.SUnitBornEvent' and \
-                        event['m_unitTypeName'] in self.production_duration:
-                    time_start_training = event['_gameloop'] - self.production_duration[event['m_unitTypeName']] * 16
-                    player_productions[player_id].append({'loop': time_start_training, 'name': event['m_unitTypeName']})
+                        event['m_unitTypeName'] in self.production_duration['unit']:
+                    start_time = event['_gameloop'] - self.production_duration['unit'][event['m_unitTypeName']] * 16
+                    player_productions[player_id].append({'loop': start_time, 'name': event['m_unitTypeName']})
                 # researches
-                elif event_name == 'NNet.Replay.Tracker.SUpgradeEvent':
-                    pass
-                    # still need some time to collect research durations of all techs
+                elif event_name == 'NNet.Replay.Tracker.SUpgradeEvent' and \
+                        event['m_upgradeTypeName'] in self.production_duration['tech']:
+                    start_time = event['_gameloop'] - self.production_duration['tech'][event['m_upgradeTypeName']] * 16
+                    player_productions[player_id].append({'loop': start_time, 'name': event['m_upgradeTypeName']})
 
         return player_productions if not use_json else json.dumps(player_productions)
 
 
 if __name__ == '__main__':
-    rep = Sc2Replay('./replays/zm.SC2Replay')
+    rep = Sc2Replay('path/to/replay')
     productions = rep.parse_player_productions(True)
     print(productions)
