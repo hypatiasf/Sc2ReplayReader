@@ -153,6 +153,11 @@ if __name__ == '__main__':
             'Burrow': 71,
             'DiggingClaws': 71,
             'ChitinousPlating': 110,
+        },
+
+        'morph': {
+            'Lair': 57,
+            'Hive': 71
         }
     }
 
